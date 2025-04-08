@@ -1,9 +1,24 @@
 import streamlit as st
 import pandas as pd
 from transformers import pipeline
+import zipfile
+import os
 
-# Membaca hasil labeling yang sudah disimpan (misalnya tweet_sentiment_results22.csv)
-df = pd.read_csv(r"D:\archive (1)\tweet_sentiment_results_fix.csv")
+# Tentukan nama file ZIP dan folder ekstraksi
+zip_filename = 'tweet_sentiment_results_fix.zip'  # Nama file ZIP di GitHub
+extract_folder = 'data/'  # Folder ekstraksi
+
+# Pastikan folder ekstraksi ada
+if not os.path.exists(extract_folder):
+    os.makedirs(extract_folder)
+
+# Ekstrak file CSV dari ZIP
+with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
+    zip_ref.extractall(extract_folder)
+
+# Membaca file CSV setelah diekstrak
+csv_filename = os.path.join(extract_folder, 'tweet_sentiment_results_fix.csv')
+df = pd.read_csv(csv_filename)
 
 # Aplikasi Streamlit
 st.title("Tweet Sentiment Classification Results")
